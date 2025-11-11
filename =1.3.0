@@ -1,0 +1,5 @@
+Collecting newick
+  Downloading newick-1.10.0-py2.py3-none-any.whl.metadata (8.4 kB)
+Downloading newick-1.10.0-py2.py3-none-any.whl (15 kB)
+Installing collected packages: newick
+Successfully installed newick-1.10.0
