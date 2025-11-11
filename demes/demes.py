@@ -1374,11 +1374,11 @@ class Graph:
     )
     sequence_length: Optional[float] = attr.ib(
         default=None,
-        validator=attr.validators.optional([int_, non_negative, finite]),
+        validator=attr.validators.optional([int_, positive, finite]),
     )
     population_size: Optional[float] = attr.ib(
         default=None,
-        validator=attr.validators.optional([int_or_float, non_negative, finite]),
+        validator=attr.validators.optional([int_or_float, positive, finite]),
     )
 
     # This attribute is for internal use only. It's a (hidden) attribute

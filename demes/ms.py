@@ -133,6 +133,25 @@ class Structure(Option):
 
 
 @attr.define
+class Mutation(Option):
+    # -t theta
+    theta: float = attr.ib(converter=float, validator=non_negative)  # Validator aus deinem Code
+
+    def __str__(self):
+        return " ".join(["-t", float_str(self.theta)])
+
+
+@attr.define
+class Recombination(Option):
+    # -r rho nsites
+    rho: float = attr.ib(converter=float, validator=non_negative)
+    nsites: int = attr.ib(converter=int, validator=positive)
+
+    def __str__(self):
+        return " ".join(["-r", float_str(self.rho), str(self.nsites)])
+
+
+@attr.define
 class Event(Option):
     # The first param of every demographic event is the event time.
     # For ms options without a time parameter (i.e. those that set the
@@ -901,7 +920,7 @@ def from_ms(
     return graph
 
 
-def to_ms(graph: demes.Graph, *, N0, samples=None) -> str:
+def to_ms(graph: demes.Graph, *, N0=None, samples=None) -> str:
     """
     Get ms command line arguments for the graph.
 
@@ -926,6 +945,20 @@ def to_ms(graph: demes.Graph, *, N0, samples=None) -> str:
     graph = graph.in_generations()
     cmd = []
     num_demes = len(graph.demes)
+    if not N0:
+        if not graph.population_size:
+            raise ValueError(
+                "Invalid population size: the 'population_size' attribute must be set "
+                "to a positive integer, either via N0 or directly in the graph."
+            )
+        N0 = graph.population_size
+    if graph.sequence_length:
+        if graph.mutation_rate:
+            theta = 4 * N0 * graph.mutation_rate * graph.sequence_length
+            cmd.append(str(Mutation(theta)))
+        if graph.recombination_rate:
+            rho = 4 * N0 * graph.recombination_rate * (graph.sequence_length - 1)
+            cmd.append(str(Recombination(rho, sequence_length)))
     if samples is not None and len(samples) != num_demes:
         raise ValueError("samples must match the number of demes in the graph")
     if num_demes > 1:
