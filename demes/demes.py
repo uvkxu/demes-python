@@ -2575,6 +2575,10 @@ class Builder:
         doi: list | None = None,
         defaults: dict | None = None,
         metadata: dict | None = None,
+        mutation_rate: float | None = None,
+        recombination_rate: float | None = None,
+        sequence_length: float | None = None,
+        population_size: float | None = None
     ):
         """
         :param str description:
@@ -2605,6 +2609,16 @@ class Builder:
             self.data["defaults"] = defaults
         if metadata is not None:
             self.data["metadata"] = metadata
+        
+        # 🔥 my new fields
+        if mutation_rate is not None:
+            self.data["mutation_rate"] = mutation_rate
+        if recombination_rate is not None:
+            self.data["recombination_rate"] = recombination_rate
+        if sequence_length is not None:
+            self.data["sequence_length"] = sequence_length
+        if population_size is not None:
+            self.data["population_size"] = population_size
 
     def add_deme(
         self,
