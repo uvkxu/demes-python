@@ -2056,7 +2056,11 @@ class Graph:
 
         check_allowed(
             data,
-            [
+            [   
+                "mutation_rate",
+                "recombination_rate",
+                "population_size",
+                "sequence_length",
                 "description",
                 "time_units",
                 "generation_time",
