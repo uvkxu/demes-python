@@ -1378,7 +1378,7 @@ class Graph:
     )
     population_size: Optional[float] = attr.ib(
         default=None,
-        validator=attr.validators.optional([int_, non_negative, finite]),
+        validator=attr.validators.optional([int_or_float, non_negative, finite]),
     )
 
     # This attribute is for internal use only. It's a (hidden) attribute
@@ -2228,6 +2228,10 @@ class Graph:
             raise KeyError("toplevel: required field 'time_units' not found")
 
         graph = cls(
+            population_size=data.pop("population_size", ""),
+            sequence_length=data.pop("sequence_length", ""),
+            mutation_rate=data.pop("mutation_rate", ""),
+            recombination_rate=data.pop("recombination_rate", ""),
             description=data.pop("description", ""),
             time_units=data.pop("time_units"),
             doi=data.pop("doi", []),
