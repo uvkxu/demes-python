@@ -2228,10 +2228,10 @@ class Graph:
             raise KeyError("toplevel: required field 'time_units' not found")
 
         graph = cls(
-            population_size=data.pop("population_size", ""),
-            sequence_length=data.pop("sequence_length", ""),
-            mutation_rate=data.pop("mutation_rate", ""),
-            recombination_rate=data.pop("recombination_rate", ""),
+            population_size=data.pop("population_size", None),
+            sequence_length=data.pop("sequence_length", None),
+            mutation_rate=data.pop("mutation_rate", None),
+            recombination_rate=data.pop("recombination_rate", None),
             description=data.pop("description", ""),
             time_units=data.pop("time_units"),
             doi=data.pop("doi", []),
@@ -2605,8 +2605,8 @@ class Builder:
         metadata: dict | None = None,
         mutation_rate: float | None = None,
         recombination_rate: float | None = None,
-        sequence_length: float | None = None,
-        population_size: float | None = None
+        sequence_length: int | None = None,
+        population_size: int | None = None
     ):
         """
         :param str description:
