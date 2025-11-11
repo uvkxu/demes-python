@@ -920,7 +920,7 @@ def from_ms(
     return graph
 
 
-def to_ms(graph: demes.Graph, *, N0=None, samples=None) -> str:
+def to_ms(graph: demes.Graph, *, N0=None, samples=None, sequence_length=None) -> str:
     """
     Get ms command line arguments for the graph.
 
@@ -952,13 +952,15 @@ def to_ms(graph: demes.Graph, *, N0=None, samples=None) -> str:
                 "to a positive integer, either via N0 or directly in the graph."
             )
         N0 = graph.population_size
-    if graph.sequence_length:
+    if not sequence_length and graph.sequence_length:
+        sequence_length = graph.sequence_length
+    if sequence_length:
         if graph.mutation_rate:
-            theta = 4 * N0 * graph.mutation_rate * graph.sequence_length
+            theta = 4 * N0 * graph.mutation_rate * sequence_length
             cmd.append(str(Mutation(theta)))
         if graph.recombination_rate:
-            rho = 4 * N0 * graph.recombination_rate * (graph.sequence_length - 1)
-            cmd.append(str(Recombination(rho, graph.sequence_length)))
+            rho = 4 * N0 * graph.recombination_rate * (sequence_length - 1)
+            cmd.append(str(Recombination(rho, sequence_length)))
     if samples is not None and len(samples) != num_demes:
         raise ValueError("samples must match the number of demes in the graph")
     if num_demes > 1:
