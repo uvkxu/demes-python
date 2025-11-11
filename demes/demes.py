@@ -31,6 +31,12 @@ def int_or_float(self, attribute, value):
     ) or value != value:  # type-agnostic test for NaN
         raise TypeError(f"{attribute.name} must be a number")
 
+def int_(self, attribute, value):
+    if (
+        not isinstance(value, numbers.Integral) and not hasattr(value, "__int__")
+    ) or value != value:  # type-agnostic test for NaN
+        raise TypeError(f"{attribute.name} must be a number")
+
 
 def positive(self, attribute, value):
     if value <= 0:
@@ -1356,6 +1362,24 @@ class Graph:
     demes: List[Deme] = attr.ib(factory=list, init=False)
     migrations: List[AsymmetricMigration] = attr.ib(factory=list, init=False)
     pulses: List[Pulse] = attr.ib(factory=list, init=False)
+
+    # 🧩 New optional model parameters
+    mutation_rate: Optional[float] = attr.ib(
+        default=None,
+        validator=attr.validators.optional([int_or_float, non_negative, finite]),
+    )
+    recombination_rate: Optional[float] = attr.ib(
+        default=None,
+        validator=attr.validators.optional([int_or_float, non_negative, finite]),
+    )
+    sequence_length: Optional[float] = attr.ib(
+        default=None,
+        validator=attr.validators.optional([int_, non_negative, finite]),
+    )
+    population_size: Optional[float] = attr.ib(
+        default=None,
+        validator=attr.validators.optional([int_, non_negative, finite]),
+    )
 
     # This attribute is for internal use only. It's a (hidden) attribute
     # because we're using slotted classes and can't add attributes after
