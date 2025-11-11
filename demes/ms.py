@@ -958,7 +958,7 @@ def to_ms(graph: demes.Graph, *, N0=None, samples=None) -> str:
             cmd.append(str(Mutation(theta)))
         if graph.recombination_rate:
             rho = 4 * N0 * graph.recombination_rate * (graph.sequence_length - 1)
-            cmd.append(str(Recombination(rho, sequence_length)))
+            cmd.append(str(Recombination(rho, graph.sequence_length)))
     if samples is not None and len(samples) != num_demes:
         raise ValueError("samples must match the number of demes in the graph")
     if num_demes > 1:
